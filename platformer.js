@@ -1,15 +1,23 @@
 //let platforms = [];
 let bob;
 let jim;
+let score;
 
 class Platform {
 	constructor(x, y){
 		this.x = x;
 		this.y = y;
-		this.w = w;
-		this.h = 20;
+		this.width = w;
+		this.height = 20;
 	}
-	
+	contains(givenX, givenY){
+		if (givenX > this.x && this.x < this.x + this.width && givenY > this.y && this.y < this.y + this.width){
+			return true;
+		}
+		else{
+			return false
+		}
+	}
 	
 	show(){
 		rect(this.x, this.y, this.width, this.height);
@@ -18,6 +26,7 @@ class Platform {
 	
  function setup(){
   createCanvas(600, 400);
+  score = 0;
   let x = 100;
   let y = 100;
   let width = 200;
@@ -29,11 +38,27 @@ class Platform {
 	//let x = 5;
 	//let y = 10;
 	//}
+
+function fallen(){
+	if(jim.y < height){
+		jim.y = 0;
+		score--;
+	}
+}
 	
 function draw(){
 	background("gray");
 	jim.showHero();
 	bob.showPlat();
+	Text("Score: "+score, 20 90);
+	
+}
+
+function drawScore(){
+	fill("black");
+	textAlign(LEFT);
+	textSize(32);
+	text("Score: " 60, 50);
 }
 	
 class Hero{
@@ -47,6 +72,9 @@ class Hero{
 		
 	}
 	move(){
+		if(bob.contains(this.x, this.y) == false){
+			this.y = y++;
+		}
 		if(KeyIsDown(LEFT_ARROW)){
 			this.x -= 5;
 		}
