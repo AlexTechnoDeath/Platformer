@@ -3,10 +3,11 @@ let bob;
 let jim;
 let score;
 var bg;
-
+var gravity = 0.12;
 
  function setup(){
-  bg = loadImage ("https://ak6.picdn.net/shutterstock/videos/14626936/thumb/4.jpg")
+  bg = loadImage ("https://cdn.glitch.com/ef394497-75c8-46fe-b696-0abfea1fa654%2F4.jpg?1511805762360")
+  sprite = loadImage ("https://cdn.glitch.com/ef394497-75c8-46fe-b696-0abfea1fa654%2Fit-is-wednesday-my-dudes-og.png?1511807868330")
   createCanvas(852, 480);
   score = 0;
   let x = 100;
@@ -68,12 +69,16 @@ class Hero{
 		this.width = 10;
 		this.height = 20;
 		this.velocityx = 0;
-		this.velocityy = 0;
+		this.yspeed = 0;
 		
 	}
 	move(){
-		if(bob.contains(this.x, this.y) == false){
-			this.y++;
+		if(bob.contains(this.x, this.y+10) && bob.contains(this.x, this.y)){
+			this.yspeed += gravity;
+			this.y += this.yspeed;
+		}else{
+			this.yspeed = 0;
+			this.y = bob.y - 10;
 		}
 		if(keyIsDown(LEFT_ARROW)){
 			this.x -= 5;
@@ -81,18 +86,20 @@ class Hero{
 		if(keyIsDown(RIGHT_ARROW)){
 			this.x += 5;
 		}
-		/*if(keyIsDown(UP_ARROW)){
-			this.y -= 5;
+		if(keyIsDown(32)){
+			this.yspeed = -5; 
 		}
-		if(keyIsDown(DOWN_ARROW)){
+		/*if(keyIsDown(DOWN_ARROW)){
 			this.y += 5;
 		}
 		*/
+	//&& bob.contains(this.x, this.y)
 	}
 	show(){
 		stroke("blue");
 		strokeWeight(4);
 		ellipse(this.x, this.y, this.width, this.height);
+		image(sprite, this.x, this.y, 50, 50);
 	}
 }
  
