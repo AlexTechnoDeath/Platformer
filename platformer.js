@@ -8,7 +8,7 @@ var gravity = 0.12;
  function setup(){
   bg = loadImage ("https://cdn.glitch.com/ef394497-75c8-46fe-b696-0abfea1fa654%2F4.jpg?1511805762360")
   sprite = loadImage ("https://cdn.glitch.com/ef394497-75c8-46fe-b696-0abfea1fa654%2Fit-is-wednesday-my-dudes-og.png?1511807868330")
-  createCanvas(852, 480);
+  createCanvas(windowWidth, windowHeight);
   score = 0;
   let x = 100;
   let y = 100;
@@ -73,7 +73,7 @@ class Hero{
 		
 	}
 	move(){
-		if(bob.contains(this.x, this.y+10) && bob.contains(this.x, this.y)){
+		if(bob.contains(this.x, this.y+10) == false){
 			this.yspeed += gravity;
 			this.y += this.yspeed;
 		}else{
@@ -96,11 +96,10 @@ class Hero{
 	//&& bob.contains(this.x, this.y)
 	}
 	show(){
-		stroke("blue");
-		strokeWeight(4);
-		ellipse(this.x, this.y, this.width, this.height);
-		image(sprite, this.x, this.y, 50, 50);
-	}
+		
+	
+		image(sprite, this.x-15, this.y-20, 50, 50);
+}
 }
  
 	 
