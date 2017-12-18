@@ -1,14 +1,16 @@
-
 let myHero;
 let score;
 var bg;
-var gravity = 0.5;
+var co;
+var gravity = 0.12;
 let platArray = [];
+let coinArray = [];
 
 
 function preload(){
 	bg = loadImage ("https://cdn.glitch.com/ef394497-75c8-46fe-b696-0abfea1fa654%2F4.jpg?1511805762360")
-  sprite = loadImage ("https://cdn.glitch.com/ef394497-75c8-46fe-b696-0abfea1fa654%2Fit-is-wednesday-my-dudes-og.png?1511807868330")
+	sprite = loadImage ("https://cdn.glitch.com/ef394497-75c8-46fe-b696-0abfea1fa654%2Fit-is-wednesday-my-dudes-og.png?1511807868330")
+	co = loadImage("https://cdn.glitch.com/ef394497-75c8-46fe-b696-0abfea1fa654%2Frobincoiin2.png?1513189590743")
 }
 
  function setup(){
@@ -18,8 +20,10 @@ function preload(){
 	  let x = random(20,width-50);
 	  let y = random(20, width-50);
 	  let platWidth = 200;
+	  let coWidth = 5;
 	  platArray.push(new Platform(x,y,platWidth));
 	  resetPlatforms();
+	  resetCoins();
   }
   
   myHero = new Hero();
@@ -32,7 +36,17 @@ function preload(){
 		let y = random(20, width-50);
 		let platWidth = 200;
 		platArray.push(new Platform(x,y,platWidth));
+		
 	}
+ }
+ function resetCoins(){
+	 coinArray = [];
+	 for (var i = 0; i < 15; i++){
+		 let x = random(20, width-50);
+		 let y = random(20, width-50);
+		 let coinWidth = 5;
+		 coinArray.push(new Coin(x,y,coinWidth));
+	 }
  }
 
 function fallen(){
@@ -48,13 +62,11 @@ function draw(){
 	background(bg);
 	myHero.show();
 	myHero.move();
-	myHero.touchingPlat();
 	drawAllPlatforms();
+	drawAllCoins();
 	fallen();
 	textSize(22);
 	text("Score: "+score, 10, 90);
-	
-	
 }
 
 
@@ -96,6 +108,7 @@ class Hero{
 	}
 	
 	touchingPlat(){
+		
 /* 		 if(this.y < platArray[i].y + platArray[i].height-10){
 			return true
 		}else{
@@ -105,6 +118,7 @@ class Hero{
 		let result = false;
 		for (let i=0; i < platArray.length; i++){
 			if(platArray[i].contains(this.x, this.y+10)){
+				this.y = platArray[i].y-10;
 				return true;
 				}				
 			}
@@ -115,9 +129,13 @@ class Hero{
 	
 	move(){
 		if(this.touchingPlat() == false){
-			//in air
 			this.yspeed += gravity;
 			this.y += this.yspeed;
+		}
+		else
+		{
+			console.log("On plat; reset yspeed");
+			this.yspeed = 0;
 		}
 		if(keyIsDown(LEFT_ARROW)){
 			this.x -= 3;
@@ -125,45 +143,80 @@ class Hero{
 		else if (keyIsDown(RIGHT_ARROW)){
 			this.x += 3;
 		}
-		else if (keyIsDown(32)){
+		if (keyIsDown(32)){
 			this.yspeed = -3;
-			this.y = this.y -= 6;
-		}
-	
-		else
-		{
-			this.yspeed = 0;
-			this.y = myHero.y - 10;
-		}
-			
-			if(keyIsDown(LEFT_ARROW)){
-				this.x -= 5;
-			}
-			if(keyIsDown(RIGHT_ARROW)){
-				this.x += 5;
-			}
-		/* checkY(height){
-			if(this.y > height) {
-				this.y=0;
-				this.yspeed = 0;
+			this.y = this.y - 6;
 		}
 	}
-		checkX(width){
-				if(this.x < width) {
-				this.x += 5;
-			}
-			(else if (this.x > width){
-				this.x -= 5;
-			}
-			
-	 */
-		}
 
-	show()
-	{
+
+	show(){
 		image(sprite, this.x-15, this.y-20, 50, 50);
 	}
+  
 }
+
+//coins
+function drawAllCoins(){
+	for(var i = 0; i<coinArray.length; i++){
+		coinArray[i].show();
+	}
+}
+
+function touchingCoin(){
+	let result = false;
+	for (let i=0; i<coins.length; i++){
+		if(dist(this.x,this.y,coinArray[i].y<20 && coinArray[i].collected == false)){
+			score++;
+			coinArray[i].collected = true;
+		}
+	}
+	return false;
+		
+}
+class Coin{
+	constructor(x, y, w) {
+	this.x = x;
+	this.y = y;
+	this.width = w;
+	this.collected = false;
+	}
+
+	show(){
+		if(this.collected == false){
+			image(co, this.x,this.y, this.width, this.height);
+		}
+	}
+	
+	contains(givenX,givenY){
+		if(givenX > this.x && givenX < this.x + this.width){
+			if(givenY > this.y && givenY < this.y + this.height){
+				return true
+				score =+ 1;
+			}
+				
+		}return false
+	
+	}
+
+	
+}
+
+
+
+	
+	
+
+
+
+
+	
+
+	
+	
+
+	
+
 
 
  
